@@ -27,6 +27,7 @@ class VoiceMessage extends StatefulWidget {
     this.meFgColor = const Color(0xffffffff),
     this.played = false,
     this.onPlay,
+    required this.player,
   }) : super(key: key);
 
   final String audioSrc;
@@ -39,14 +40,13 @@ class VoiceMessage extends StatefulWidget {
       contactPlayIconColor;
   final bool played, me;
   Function()? onPlay;
-
+  final AudioPlayer player;
   @override
   _VoiceMessageState createState() => _VoiceMessageState();
 }
 
 class _VoiceMessageState extends State<VoiceMessage>
     with SingleTickerProviderStateMixin {
-  final AudioPlayer _player = AudioPlayer();
   final double maxNoiseHeight = 6.w(), noiseWidth = 26.5.w();
   Duration? _audioDuration;
   double maxDurationForSlider = .0000001;
@@ -232,14 +232,14 @@ class _VoiceMessageState extends State<VoiceMessage>
 
   _startPlaying() async {
     _playingStatus = 1;
-    await _player.play(UrlSource(widget.audioSrc));
+    await widget.player.play(UrlSource(widget.audioSrc));
     _setPlayingStatus();
     _controller!.forward();
   }
 
   _stopPlaying() async {
     _playingStatus = 0;
-    await _player.pause();
+    await widget.player.pause();
     _controller!.stop();
   }
 
@@ -293,12 +293,12 @@ class _VoiceMessageState extends State<VoiceMessage>
 
   @override
   void dispose() {
-    _player.dispose();
+    widget.player.dispose();
     super.dispose();
   }
 
   void _listenToRemaningTime() {
-    _player.onDurationChanged.listen((Duration p) {
+    widget.player.onDurationChanged.listen((Duration p) {
       final _newRemaingTime1 = p.toString().split('.')[0];
       final _newRemaingTime2 =
           _newRemaingTime1.substring(_newRemaingTime1.length - 5);
@@ -314,7 +314,7 @@ class _VoiceMessageState extends State<VoiceMessage>
     duration = d.round();
     _controller?.value = (noiseWidth) * duration / maxDurationForSlider;
     _remaingTime = VoiceDuration.getDuration(duration);
-    await _player.seek(Duration(seconds: duration));
+    await widget.player.seek(Duration(seconds: duration));
     setState(() {});
   }
 }
