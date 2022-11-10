@@ -300,12 +300,10 @@ class _VoiceMessageState extends State<VoiceMessage>
 
   void _listenToRemaningTime() {
     widget.player.onDurationChanged.listen((Duration p) {
-      final _newRemaingTime1 = p.toString().split('.')[0];
-      final _newRemaingTime2 =
-          _newRemaingTime1.substring(_newRemaingTime1.length - 5);
-      if (_newRemaingTime2 != _remaingTime) {
-        setState(() => _remaingTime = _newRemaingTime2);
-      }
+      final _newRemaingTime1 = p.inSeconds;
+      final currentDuration =
+          (_audioDuration?.inSeconds ?? 0) - _newRemaingTime1;
+      setState(() => _remaingTime = VoiceDuration.getDuration(currentDuration));
     });
   }
 
