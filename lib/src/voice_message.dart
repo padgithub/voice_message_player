@@ -231,6 +231,7 @@ class _VoiceMessageState extends State<VoiceMessage>
   _setPlayingStatus() => _isPlaying = _playingStatus == 1;
 
   _startPlaying() async {
+    _stopPlaying();
     _playingStatus = 1;
     await widget.player.play(UrlSource(widget.audioSrc));
     _setPlayingStatus();
