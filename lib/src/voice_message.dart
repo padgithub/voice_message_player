@@ -231,7 +231,6 @@ class _VoiceMessageState extends State<VoiceMessage>
   _setPlayingStatus() => _isPlaying = _playingStatus == 1;
 
   _startPlaying() async {
-    _stopPlaying();
     _playingStatus = 1;
     await widget.player.play(UrlSource(widget.audioSrc));
     _setPlayingStatus();
@@ -300,10 +299,7 @@ class _VoiceMessageState extends State<VoiceMessage>
 
   void _listenToRemaningTime() {
     widget.player.onDurationChanged.listen((Duration p) {
-      final _newRemaingTime1 = p.inSeconds;
-      final currentDuration =
-          (_audioDuration?.inSeconds ?? 0) - _newRemaingTime1;
-      setState(() => _remaingTime = VoiceDuration.getDuration(currentDuration));
+      setState(() => _remaingTime = VoiceDuration.getDuration(p.inSeconds));
     });
   }
 
