@@ -301,6 +301,14 @@ class _VoiceMessageState extends State<VoiceMessage>
     widget.player.onDurationChanged.listen((Duration p) {
       setState(() => _remaingTime = VoiceDuration.getDuration(p.inSeconds));
     });
+    widget.player.onPlayerStateChanged.listen((PlayerState event) {
+      if (event == PlayerState.stopped) {
+        setState(() {
+          _isPlaying = false;
+          _controller?.reset();
+        });
+      }
+    });
   }
 
   /// document will be added
