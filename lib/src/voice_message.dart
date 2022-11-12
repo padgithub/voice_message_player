@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 // ignore: library_prefixes
@@ -303,6 +305,7 @@ class _VoiceMessageState extends State<VoiceMessage>
       setState(() => _remaingTime = VoiceDuration.getDuration(p.inSeconds));
     });
     widget.player.onPlayerStateChanged.listen((PlayerState event) {
+      log("change audio status: ${event}");
       if (event == PlayerState.stopped) {
         setState(() {
           _isPlaying = false;
