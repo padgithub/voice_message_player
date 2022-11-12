@@ -294,6 +294,7 @@ class _VoiceMessageState extends State<VoiceMessage>
   @override
   void dispose() {
     widget.player.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
