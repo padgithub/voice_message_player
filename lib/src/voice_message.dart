@@ -182,13 +182,11 @@ class _VoiceMessageState extends State<VoiceMessage>
                     CurvedAnimation(parent: _controller!, curve: Curves.ease),
                 builder: (context, child) {
                   return Positioned(
-                    left: _controller!.value,
+                    left: _controller?.value,
                     child: Container(
                       width: noiseWidth,
                       height: 6.w(),
-                      color: widget.me
-                          ? widget.meBgColor.withOpacity(.4)
-                          : widget.contactBgColor.withOpacity(.35),
+                      color: widget.contactBgColor.withOpacity(.35),
                     ),
                   );
                 },
@@ -236,13 +234,13 @@ class _VoiceMessageState extends State<VoiceMessage>
     _playingStatus = 1;
     await widget.player.play(UrlSource(widget.audioSrc));
     _setPlayingStatus();
-    _controller!.forward();
+    _controller?.forward();
   }
 
   _stopPlaying() async {
     _playingStatus = 0;
     await widget.player.pause();
-    _controller!.stop();
+    _controller?.stop();
   }
 
   void _setDuration() async {
@@ -259,12 +257,13 @@ class _VoiceMessageState extends State<VoiceMessage>
     );
 
     /// document will be added
-    _controller!.addListener(() {
-      if (_controller!.isCompleted) {
-        _controller!.reset();
-        _isPlaying = false;
-        x2 = false;
-        setState(() {});
+    _controller?.addListener(() {
+      if (_controller != null && _controller!.isCompleted) {
+        _controller?.reset();
+        setState(() {
+          _isPlaying = false;
+          x2 = false;
+        });
       }
     });
     _setAnimationCunfiguration(_audioDuration);
@@ -281,8 +280,8 @@ class _VoiceMessageState extends State<VoiceMessage>
 
   // void _toggle2x() {
   //   x2 = !x2;
-  //   _controller!.duration = Duration(seconds: x2 ? duration ~/ 2 : duration);
-  //   if (_controller!.isAnimating) _controller!.forward();
+  //   _controller?.duration = Duration(seconds: x2 ? duration ~/ 2 : duration);
+  //   if (_controller?.isAnimating) _controller?.forward();
   //   _player.setPlaybackRate(x2 ? 2 : 1);
   //   setState(() {});
   // }
